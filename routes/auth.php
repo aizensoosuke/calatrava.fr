@@ -5,10 +5,10 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
 Route::middleware('guest')->group(function () {
-    Volt::route('login', 'auth.login')
+    Volt::route('login', 'login')
         ->name('login');
 
-    Volt::route('register', 'auth.register')
+    Volt::route('register', 'register')
         ->name('register');
 
     Volt::route('forgot-password', 'auth.forgot-password')
@@ -29,7 +29,8 @@ Route::middleware('auth')->group(function () {
 
     Volt::route('confirm-password', 'auth.confirm-password')
         ->name('password.confirm');
+
+    Route::get('logout', App\Livewire\Actions\Logout::class)
+        ->name('logout');
 });
 
-Route::post('logout', App\Livewire\Actions\Logout::class)
-    ->name('logout');
