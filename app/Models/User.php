@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,10 +11,10 @@ use Illuminate\Support\Str;
 use Lunar\Base\Traits\LunarUser;
 use Lunar\Base\LunarUser as LunarUserInterface;
 
-class User extends Authenticatable implements LunarUserInterface
+class User extends Authenticatable implements LunarUserInterface, MustVerifyEmailContract
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, LunarUser;
+    use HasFactory, Notifiable, LunarUser, MustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
