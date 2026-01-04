@@ -10,11 +10,16 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "blade-ui-kit/blade-heroicons": "^2.6",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1",
-        "livewire/flux": "^2.1.1",
-        "livewire/volt": "^1.7.0",
-        "lunarphp/lunar": "^1.0.0-beta"
+        "laravel/tinker": "^2.10",
+        "livewire/flux": "^2.10",
+        "livewire/volt": "^1.10",
+        "lunarphp/lunar": "^1.2",
+        "lunarphp/meilisearch": "^1.1.0",
+        "online-payments/sdk-php": "^6.2",
+        "spatie/laravel-data": "^4.18",
+        "wireui/heroicons": "^2.9"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

@@ -3,20 +3,21 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::view('/', 'home')
+    ->name('home');
+Route::view('/collection/{slug}', 'collection')
+    ->name('collection');
+Route::view('/checkout', 'checkout')
+    ->name('checkout');
+Route::view('/payment-callback', 'payment-callback')
+    ->name('payment-callback');
 
 Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
+    Route::view('/account', 'account')
+        ->name('account');
 
-    Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
-    Volt::route('settings/password', 'settings.password')->name('settings.password');
-    Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+    Route::view('/account/edit', 'account-edit')
+        ->name('account.edit');
 });
 
 require __DIR__.'/auth.php';

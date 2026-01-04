@@ -2,25 +2,32 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
+use App\Modifiers\CustomShippingModifier;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Lunar\Admin\Support\Facades\LunarPanel;
+use Lunar\Facades\ModelManifest;
+use Lunar\Models\Contracts\Product as LunarProduct;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         LunarPanel::register();
+
+        ModelManifest::replace(
+            LunarProduct::class,
+            Product::class,
+        );
     }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+    public function boot(\Lunar\Base\ShippingModifiers $shippingModifiers): void
     {
         URL::forceScheme('https');
+
+        $shippingModifiers->add(
+            CustomShippingModifier::class
+        );
     }
 }
