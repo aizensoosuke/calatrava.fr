@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\OrderActions;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Route;
 use Lunar\Models\Order;
@@ -18,6 +19,16 @@ Route::view('/legal', 'legal')
     ->name('legal');
 Route::view('/terms', 'terms')
     ->name('terms');
+
+Route::get('/retry-payment/{ref}', function ($ref) {
+    $order = Order::firstWhere('reference', $ref);
+
+    if (!$order) {
+        abort(404);
+    }
+
+    return redirect(OrderActions::createPaymentPage($order));
+})->name('retry-payment');
 
 Route::get('/invoice/{ref}', function ($ref) {
     $order = Order::firstWhere('reference', $ref);
