@@ -2,8 +2,10 @@
 
 namespace App\Actions;
 
+use App\Mail\OrderPlacedMathilde;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Lunar\Models\Order;
 use Lunar\Models\Transaction;
 use OnlinePayments\Sdk\Domain\WebhooksEvent;
@@ -52,6 +54,8 @@ class CawlActions
             'status' => 'payment-received',
             'placed_at' => now(),
         ]);
+
+        Mail::to('contact@calatrava.fr')->send(new OrderPlacedMathilde($transaction->order));
     }
 
     public static function handleUnsuccessful(Transaction $transaction, WebhooksEvent $event): void
