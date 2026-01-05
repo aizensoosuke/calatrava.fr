@@ -3,6 +3,8 @@
 namespace App\PaymentTypes;
 
 use App\Services\CawlPaymentService;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Lunar\Base\DataTransferObjects\PaymentCapture;
 use Lunar\Base\DataTransferObjects\PaymentRefund;
 use Lunar\Base\DataTransferObjects\PaymentAuthorize;
@@ -99,6 +101,7 @@ class CawlPayment extends AbstractPayment
 
         $transaction = LunarTransaction::with('order')->firstWhere('reference', $paymentId);
         if($transaction?->exists) {
+            Log::debug('User refreshed payment callback page. Found the transaction.', ['paymentId' => $paymentId]);
             return $transaction->order;
         }
 
@@ -108,52 +111,70 @@ class CawlPayment extends AbstractPayment
 
         if (is_null($lunarOrder)) {
             // TODO: do something helpful
-            throw new \Exception("Could not find transaction.");
+            throw new \Exception("Could not find order.");
         }
 
-        if ($hostedCheckout->getCreatedPaymentOutput()->getPaymentStatusCategory() === "SUCCESSFUL") {
-            $lunarOrder->transactions()->create([
-                'success' => true,
-                'type' => 'capture',
-                'driver' => 'cawl',
-                'amount' => $hostedCheckout->getCreatedPaymentOutput()->getPayment()->getPaymentOutput()->getAmountOfMoney()->getAmount(),
-                'reference' => $paymentId,
-                'status' => 'Paiement réussi',
-                'notes' => '',
-                'card_type' => '',
-                'last_four' => '',
-                'captured_at' => now(),
-                'meta' => [
-                    'RETURNMAC' => $returnmac,
-                    'hostedCheckoutId' => $hostedCheckoutId,
-                ]
-            ]);
+        Cache::lock('write-transactions', 10)->get(function () use ($lunarOrder, $hostedCheckout, $paymentId, $returnmac, $hostedCheckoutId) {
+            $transaction = LunarTransaction::firstWhere('reference', $paymentId);
+            if ($hostedCheckout->getCreatedPaymentOutput()->getPaymentStatusCategory() === "SUCCESSFUL") {
+                if (!$transaction) {
+                    Log::debug('/payment-callback: creating successful transaction', ['order' => $lunarOrder->reference, 'paymentId' => $paymentId]);
+                    $transaction = $lunarOrder->transactions()->create([
+                        'success' => true,
+                        'type' => 'capture',
+                        'driver' => 'cawl',
+                        'amount' => $hostedCheckout->getCreatedPaymentOutput()->getPayment()->getPaymentOutput()->getAmountOfMoney()->getAmount(),
+                        'reference' => $paymentId,
+                        'status' => 'Paiement réussi',
+                        'notes' => '',
+                        'card_type' => '',
+                        'last_four' => '',
+                        'captured_at' => now(),
+                        'meta' => [
+                            'RETURNMAC' => $returnmac,
+                            'hostedCheckoutId' => $hostedCheckoutId,
+                        ]
+                    ]);
+                } else {
+                    Log::debug('/payment-callback: updating successful transaction (likely created by webhook)', ['order' => $lunarOrder->reference, 'paymentId' => $paymentId]);
+                }
 
-            $lunarOrder->update([
-                'status' => 'payment-received',
-                'placed_at' => now(),
-            ]);
+                $transaction->meta["RETURNMAC"] = $returnmac;
+                $transaction->meta["hostedCheckoutId"] = $hostedCheckoutId;
+                $transaction->save();
 
-            return $lunarOrder;
-        }
+                $lunarOrder->update([
+                    'status' => 'payment-received',
+                    'placed_at' => now(),
+                ]);
+            } else {
+                if (!$transaction) {
+                    Log::debug('/payment-callback: creating failed transaction', ['order' => $lunarOrder->reference, 'paymentId' => $paymentId]);
+                    $transaction = $lunarOrder->transactions()->create([
+                        'success' => false,
+                        'type' => 'capture',
+                        'driver' => 'cawl',
+                        'amount' => $hostedCheckout->getCreatedPaymentOutput()->getPayment()->getPaymentOutput()->getAmountOfMoney()->getAmount(),
+                        'reference' => $paymentId,
+                        'status' => 'Paiement échoué',
+                        'notes' => '',
+                        'card_type' => '',
+                        'last_four' => '',
+                        'captured_at' => now(),
+                        'meta' => [
+                            'RETURNMAC' => $returnmac,
+                            'hostedCheckoutId' => $hostedCheckoutId,
+                        ]
+                    ]);
+                } else {
+                    Log::debug('/payment-callback: updating failed transaction (likely created by webhook)', ['order' => $lunarOrder->reference, 'paymentId' => $paymentId]);
+                }
 
-
-        $lunarOrder->transactions()->create([
-            'success' => false,
-            'type' => 'capture',
-            'driver' => 'cawl',
-            'amount' => $hostedCheckout->getCreatedPaymentOutput()->getPayment()->getPaymentOutput()->getAmountOfMoney()->getAmount(),
-            'reference' => $hostedCheckout->getCreatedPaymentOutput()->getPayment()->getId(),
-            'status' => 'Paiement échoué',
-            'notes' => '',
-            'card_type' => '',
-            'last_four' => '',
-            'captured_at' => now(),
-            'meta' => [
-                'RETURNMAC' => $returnmac,
-                'hostedCheckoutId' => $hostedCheckoutId,
-            ]
-        ]);
+                $transaction->meta["RETURNMAC"] = $returnmac;
+                $transaction->meta["hostedCheckoutId"] = $hostedCheckoutId;
+                $transaction->save();
+            }
+        });
 
         return $lunarOrder;
     }

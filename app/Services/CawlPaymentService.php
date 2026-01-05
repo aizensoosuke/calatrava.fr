@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use OnlinePayments\Sdk\Authentication\V1HmacAuthenticator;
 use OnlinePayments\Sdk\Client;
 use OnlinePayments\Sdk\Communicator;
@@ -13,7 +15,12 @@ use OnlinePayments\Sdk\Domain\CreateHostedCheckoutResponse;
 use OnlinePayments\Sdk\Domain\GetHostedCheckoutResponse;
 use OnlinePayments\Sdk\Domain\HostedCheckoutSpecificInput;
 use OnlinePayments\Sdk\Domain\Order;
+use OnlinePayments\Sdk\Domain\ValidateCredentialsRequest;
+use OnlinePayments\Sdk\Domain\ValidateCredentialsResponse;
 use OnlinePayments\Sdk\ValidationException;
+use OnlinePayments\Sdk\Webhooks\InMemorySecretKeyStore;
+use OnlinePayments\Sdk\Webhooks\SignatureValidationException;
+use OnlinePayments\Sdk\Webhooks\WebhooksHelper;
 
 class CawlPaymentService
 {
