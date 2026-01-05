@@ -1,10 +1,10 @@
 <div class="flex gap-4 lg:items-center text-xs font-semibold">
-    <x-navigation-link-icon
+    <!--x-navigation-link-icon
         label="Rechercher"
         class="hidden lg:block"
-        icon="magnifying-glass" />
+        icon="magnifying-glass" /-->
     @if(auth()->guest())
-        <x-navigation-link-icon
+        <!-- x-navigation-link-icon
             :url="route('login')"
             label="Se connecter"
             class="hidden sm:block"
@@ -12,9 +12,9 @@
         <x-navigation-link-icon
             :url="route('login')"
             class="sm:hidden"
-            icon="user" />
+            icon="user" /-->
     @else
-        <x-navigation-link-icon
+        <!--x-navigation-link-icon
             :url="route('account')"
             label="Mon compte"
             class="hidden sm:block"
@@ -22,11 +22,11 @@
         <x-navigation-link-icon
             :url="route('account')"
             class="sm:hidden"
-            icon="user" />
+            icon="user" /-->
     @endif
-    <x-navigation-link-icon
+    <!--x-navigation-link-icon
         label="Favoris"
         icon="heart"
-        class="hidden lg:block" />
+        class="hidden lg:block" /-->
     <x-cart-popover />
 </div>
