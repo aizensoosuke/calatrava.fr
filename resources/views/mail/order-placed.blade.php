@@ -1,16 +1,15 @@
 @php
     /**  @var \Lunar\Models\Order $order */
 
-    use Lunar\Admin\Filament\Resources\OrderResource;
-
-    $lunarOrderUrl = OrderResource::getUrl('order', ['record' => $order->id]);
-    $orderUrl = route('order', $order->reference);
+    $recapUrl = route('order', $order->reference);
 @endphp
 
 <x-mail::message>
 # Commande #{{ $order->reference }}
 
-Une nouvelle commande a été passée.
+Bonjour {{ $order->shippingAddress->first_name }},<br>
+
+Nous avons bien reçu votre commande :
 
 <table style="border: 1px solid; padding: 10px; border-collapse: collapse">
 <thead>
@@ -32,7 +31,8 @@ Une nouvelle commande a été passée.
 
 <br>
 
-[Voir le récapitulatif de commande]({{ $orderUrl }})
+[Voir le récapitulatif]({{ $recapUrl }})
 
-[Voir la commande sur Lunar]({{ $lunarOrderUrl }})
+Merci pour votre confiance !<br>
+Mathilde Calatrava
 </x-mail::message>

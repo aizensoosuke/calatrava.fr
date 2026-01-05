@@ -2,7 +2,9 @@
 
 namespace App\Actions;
 
+use App\Mail\OrderPlaced;
 use App\Mail\OrderPlacedMathilde;
+use App\Mail\PaymentFailed;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -55,7 +57,9 @@ class CawlActions
             'placed_at' => now(),
         ]);
 
-        Mail::to('contact@calatrava.fr')->send(new OrderPlacedMathilde($transaction->order));
+        $order = $transaction->order;
+        Mail::to('contact@calatrava.fr')->send(new OrderPlacedMathilde($order));
+        Mail::to($order->shippingAddress->contact_email)->send(new OrderPlaced($order));
     }
 
     public static function handleUnsuccessful(Transaction $transaction, WebhooksEvent $event): void
@@ -72,6 +76,9 @@ class CawlActions
             'captured_at' => now(),
         ]);
         $transaction->save();
+
+        $order = $transaction->order;
+        Mail::to($order->shippingAddress->contact_email)->send(new PaymentFailed($order));
     }
 
     public static function handleWebhook(WebhooksEvent $event): void
