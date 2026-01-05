@@ -12,7 +12,7 @@ Route::view('/checkout', 'checkout')
 Route::view('/payment-callback', 'payment-callback')
     ->name('payment-callback');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'disabled'])->group(function () {
     Route::view('/account', 'account')
         ->name('account');
 
