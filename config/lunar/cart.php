@@ -141,7 +141,7 @@ return [
     */
     'prune_tables' => [
 
-        'enabled' => false,
+        'enabled' => true,
 
         'pipelines' => [
             Lunar\Pipelines\CartPrune\PruneAfter::class,
@@ -149,7 +149,7 @@ return [
             Lunar\Pipelines\CartPrune\WhereNotMerged::class,
         ],
 
-        'prune_interval' => 90, // days
+        'prune_interval' => 2, // days
 
     ],
 ];
