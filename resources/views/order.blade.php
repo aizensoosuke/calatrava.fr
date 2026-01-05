@@ -65,6 +65,9 @@
                             </div>
                         </h2>
                     @endif
+                    @if($order->isPlaced())
+                        <x-button :url="route('invoice', $order->reference)">Télécharger une facture</x-button>
+                    @endif
                     <x-button class="mt-2" :url="route('home')" primary>Retour au site</x-button>
                 </div>
             </div>
