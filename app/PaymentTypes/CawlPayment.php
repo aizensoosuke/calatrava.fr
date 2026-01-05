@@ -89,7 +89,7 @@ class CawlPayment extends AbstractPayment
         return null;
     }
 
-    public function callback(string $returnmac, string $hostedCheckoutId): bool
+    public function callback(string $returnmac, string $hostedCheckoutId): LunarOrder
     {
         // FIXME: handle exceptions
         $hostedCheckout = app(CawlPaymentService::class)
@@ -97,9 +97,9 @@ class CawlPayment extends AbstractPayment
 
         $paymentId = $hostedCheckout->getCreatedPaymentOutput()->getPayment()->getId();
 
-        $transaction = LunarTransaction::where('reference', $paymentId)->first();
+        $transaction = LunarTransaction::with('order')->firstWhere('reference', $paymentId);
         if($transaction?->exists) {
-            return $transaction->success;
+            return $transaction->order;
         }
 
         $lunarOrder = LunarOrder::where('meta->RETURNMAC', $returnmac)
@@ -134,8 +134,9 @@ class CawlPayment extends AbstractPayment
                 'placed_at' => now(),
             ]);
 
-            return true;
+            return $lunarOrder;
         }
+
 
         $lunarOrder->transactions()->create([
             'success' => false,
@@ -154,7 +155,7 @@ class CawlPayment extends AbstractPayment
             ]
         ]);
 
-        return false;
+        return $lunarOrder;
     }
 
     public function refund(Transaction $transaction, int $amount = 0, $notes = null): PaymentRefund
