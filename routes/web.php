@@ -1,7 +1,9 @@
 <?php
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use Lunar\Models\Order;
 
 Route::view('/', 'home')
     ->name('home');
@@ -17,6 +19,17 @@ Route::view('/legal', 'legal')
     ->name('legal');
 Route::view('/terms', 'terms')
     ->name('terms');
+Route::get('/invoice/{ref}', function ($ref) {
+    $order = Order::firstWhere('reference', $ref);
+
+    if(!$order) {
+        abort(404);
+    }
+
+    return Pdf::loadView('lunarpanel::pdf.order', [
+        'record' => $order,
+    ])->stream();
+})->name('invoice');
 
 Route::middleware(['auth', 'disabled'])->group(function () {
     Route::view('/account', 'account')
