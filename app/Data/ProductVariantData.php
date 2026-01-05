@@ -30,7 +30,7 @@ class ProductVariantData extends Data
             id:  $variant->id,
             size: $variant->values->where('product_option_id', $size_option_id)->first()?->translate('name') ?? '',
             color: $variant->values->where('product_option_id', $color_option_id)->first()?->translate('name') ?? '',
-            stock: $variant->stock
+            stock: $variant->stock,
         );
     }
 }

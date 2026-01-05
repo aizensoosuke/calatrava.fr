@@ -11,6 +11,8 @@ Route::view('/checkout', 'checkout')
     ->name('checkout');
 Route::view('/payment-callback', 'payment-callback')
     ->name('payment-callback');
+Route::view('/order/{ref}', 'order')
+    ->name('order');
 
 Route::middleware(['auth', 'disabled'])->group(function () {
     Route::view('/account', 'account')

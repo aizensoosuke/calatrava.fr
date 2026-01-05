@@ -28,7 +28,6 @@ class OrderActions
             'customer_id' => $cart->customer_id,
             'reference' => $ref,
             'customer_reference' => $ref,
-            'placed_at' => now(),
         ]);
 
         return $lunarOrder;
