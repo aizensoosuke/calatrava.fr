@@ -28,7 +28,7 @@
         @vite('resources/js/app.js')
         @vite('resources/css/app.css')
     </head>
-    <body id="app" class="relative min-vh-100 min-w-[320px] overflow-x-scroll font-display antialiased">
+    <body id="app" class="relative flex flex-col min-h-screen min-w-[320px] overflow-x-scroll font-display antialiased">
         @if($withHeader)
             <x-layouts.sections.header />
         @endif

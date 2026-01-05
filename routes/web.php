@@ -13,6 +13,10 @@ Route::view('/payment-callback', 'payment-callback')
     ->name('payment-callback');
 Route::view('/order/{ref}', 'order')
     ->name('order');
+Route::view('/legal', 'legal')
+    ->name('legal');
+Route::view('/terms', 'terms')
+    ->name('terms');
 
 Route::middleware(['auth', 'disabled'])->group(function () {
     Route::view('/account', 'account')
