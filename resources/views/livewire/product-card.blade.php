@@ -37,10 +37,14 @@ $addToCart = action(function ($id) {
 
     if ($purchasable === null) {
         $this->status = 'Product not found.';
+        $this->dispatch('cart-updated');
+        return;
     }
 
     if ($purchasable->stock <= 0) {
         $this->status = 'Product out of stock.';
+        $this->dispatch('cart-updated');
+        return;
     }
 
     $purchasable->decrement('stock');
