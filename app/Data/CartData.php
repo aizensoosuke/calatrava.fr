@@ -30,36 +30,31 @@ class CartData extends Data implements Wireable
     {
     }
 
-    public static function fromModel(Cart $cart): self
+    public static function fromCart(Cart $cart): self
     {
         $cart->setShippingAddress([
             'country_id' => Country::where('iso2', 'FR')->first()->id,
         ]);
-
         $cart->calculate();
 
         $normalShipping = \Lunar\Facades\ShippingManifest::getOption($cart, 'SHIPPING');
         $freeShipping = \Lunar\Facades\ShippingManifest::getOption($cart, 'SHIPPING_FREE');
         $shippingOption = $cart->subTotal->value > config('env.shipping.free_from') ? $freeShipping : $normalShipping;
+        $cart->shippingOptionOverride = $shippingOption;
         $cart->setShippingOption($shippingOption);
 
-        $cart->calculate();
-
-        $subTotal = $cart->subTotal->value;
-        $subTotalTax = $cart->taxTotal->value;
-
-        $shippingTotal = $cart->shippingTotal->value;
-        $shippingTax = $cart->shippingTaxTotal->value;
-
-        $tax = $subTotalTax + $shippingTax;
-        $total = $cart->total->value;
+        $cart->recalculate();
 
         return new self(
             lines: $cart->lines->map(fn (CartLine $line) => CartLineData::fromModel($line)),
-            subTotal: $subTotal,
-            shippingTotal: $cart->shippingTotal?->value ?? 0,
-            tax: $tax,
-            total: $total,
+            subTotal: $cart->subTotal->value,
+            shippingTotal: $cart->shippingTotal->value,
+            tax: $cart->taxTotal->value,
+            total: $cart->total->value,
         );
+    }
+
+    public static function fromModel(Cart $cart): self {
+        return self::fromCart($cart);
     }
 }

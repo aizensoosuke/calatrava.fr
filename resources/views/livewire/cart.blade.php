@@ -26,9 +26,9 @@ on([
 ]);
 
 $refresh = protect(function () {
-    $cart = CartSession::current();
+    $cart = CartSession::current(estimateShipping: true);
     if ($cart) {
-        $this->cart = CartData::from($cart);
+        $this->cart = CartData::fromCart($cart);
     }
 });
 
@@ -53,10 +53,18 @@ $delete = action(function ($lineId) {
 ?>
 <div class="flex flex-col p-4 w-screen -mr-8 sm:mr-0 sm:w-96 border-gray-800 bg-white border">
     @if($cart === null || $cart->lines->count() == 0)
-        <div class="text-center">Votre panier est vide</div>
+        <div wire:loading.class.add="hidden" class="text-center">Votre panier est vide</div>
+        <div wire:loading.class.remove="hidden" class="hidden italic" x-on:adding-to-cart.window="$el.classList.remove('hidden')">
+            Mise à jour...
+        </div>
     @else
-        <div class="h5 font-semibold uppercase">
-            Panier ({{ $cart->lines->count() }})
+        <div class="flex justify-between">
+            <div class="h5 font-semibold uppercase">
+                Panier ({{ $cart->lines->count() }})
+            </div>
+            <div wire:loading.class.remove="hidden" class="hidden italic" x-on:adding-to-cart.window="$el.classList.remove('hidden')">
+                Mise à jour...
+            </div>
         </div>
         <div class="flex flex-col gap-2 mt-6">
             @foreach($cart->lines as $line)

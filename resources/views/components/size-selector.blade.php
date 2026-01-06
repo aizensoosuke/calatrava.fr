@@ -12,7 +12,7 @@ use App\Data\ProductData;
     <div class='flex justify-around gap-8'>
         @foreach($product->variants as $variant)
             <button
-                x-on:click="$wire.addToCart('{{ $variant->id }}')"
+                x-on:click="$wire.addToCart('{{ $variant->id }}'); $dispatch('adding-to-cart')"
                 x-show="{{ $xSelectedColorId }} == '{{ $variant->colorId }}'"
                 x-cloak
                 class="
