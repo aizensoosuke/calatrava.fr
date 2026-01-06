@@ -51,7 +51,7 @@ $delete = action(function ($lineId) {
 
 
 ?>
-<div class="flex flex-col p-4 w-96 border-gray-800 bg-white border">
+<div class="flex flex-col p-4 w-screen -mr-8 sm:mr-0 sm:w-96 border-gray-800 bg-white border">
     @if($cart === null || $cart->lines->count() == 0)
         <div class="text-center">Votre panier est vide</div>
     @else
