@@ -33,6 +33,23 @@ class ProductActions
         return $productModels->map(fn ($product) => ProductData::fromProductModel($product));
     }
 
+    public static function getProductFromSlug(string $slug): ProductData
+    {
+        $url = LunarActions::fetchUrl(
+            $slug,
+            \Lunar\Models\Product::morphName(),
+        );
+
+        if (! $url) {
+            abort(404);
+        }
+
+        /** @var Product $product */
+        $product = $url->element;
+
+        return ProductData::fromProductModel($product);
+    }
+
     public static function getProducts(): Collection
     {
         $productModels = Product::with([

@@ -9,6 +9,8 @@ Route::view('/', 'home')
     ->name('home');
 Route::view('/collection/{slug}', 'collection')
     ->name('collection');
+Route::view('/product/{slug}', 'product')
+    ->name('product');
 Route::view('/checkout', 'checkout')
     ->name('checkout');
 Route::view('/payment-callback', 'payment-callback')

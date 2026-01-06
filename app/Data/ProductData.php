@@ -16,6 +16,7 @@ class ProductData extends Data implements Wireable
 
     public function __construct(
         public string       $id,
+        public string $slug,
         public string       $name,
         public string       $htmlDescription,
         public string       $price,
@@ -38,8 +39,9 @@ class ProductData extends Data implements Wireable
 
         return new self(
             id: $product->id,
+            slug: $product->defaultUrl->slug,
             name: $product->getName(),
-            htmlDescription: $product->description ?? '',
+            htmlDescription: $product->translateAttribute('description') ?? '',
             price: $product->getPrice(),
             defaultColorId: $colors->first()->id,
             isAvailable: $product->getIsInStock(),

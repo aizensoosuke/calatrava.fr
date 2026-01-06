@@ -107,7 +107,11 @@ $addToCart = action(function ($id) {
     </div>
     <div class='flex flex-row px-1 pt-3 justify-between'>
         <div>
+            @if(request()->routeIs('product'))
             <div>{{ $product->name }}</div>
+            @else
+            <a class="hover:underline" href="{{ route('product', $product->slug) }}">{{ $product->name }}</a>
+            @endif
             <div>{{ $product->price }} €</div>
         </div>
     </div>
