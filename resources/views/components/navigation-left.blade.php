@@ -38,7 +38,7 @@
                         <div wire:key="{{ $category->slug }}">
                             <a class="hover:underline text-sm font-semibold capitalize" href="{{ $category->url }}">{{ $category->name }}</a>
 
-                            <div class="mt-4">
+                            <div class="flex flex-col mt-2 gap-1">
                                 @foreach($category->children as $subcategory)
                                     <a class="hover:underline text-sm capitalize" wire:key="{{ $subcategory->slug }}" href="{{ $category->url }}">{{ $subcategory->name }}</a>
                                 @endforeach
