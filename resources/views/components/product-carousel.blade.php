@@ -15,9 +15,9 @@ use App\Data\ProductData;
         @if(! $product->isAvailable) opacity-60 @endif
         "
 >
-    <div class="glide relative">
+    <div class="glide">
         <div class="glide__track" data-glide-el="track">
-            <ul class="glide__slides">
+            <ul class="glide__slides" style="touch-action: auto">
                 @foreach($product->carousel as $image)
                     <li class="glide__slide">
                         <img src="{{ $image->url }}" alt="{{ $image->alt }}" />
@@ -26,14 +26,19 @@ use App\Data\ProductData;
             </ul>
         </div>
 
-        <div class="glide__arrows absolute w-full h-full flex flex-row justify-between items-center top-0" data-glide-el="controls">
+        <div class="glide__arrows" data-glide-el="controls">
             <button
-                class="glide__arrow glide__arrow--left h-full cursor-pointer p-4 select-none text-xl"
+                x-on:dblclick.prevent=""
+                class="glide__arrow glide__arrow--left absolute top-0 h-full cursor-pointer p-4 select-none text-xl"
                 data-glide-dir="<"
             >
                 ❮
             </button>
-            <button class="glide__arrow glide__arrow--right h-full cursor-pointer p-4 select-non text-xl" data-glide-dir=">">
+            <button
+                x-on:dblclick.prevent=""
+                class="glide__arrow glide__arrow--right absolute top-0 right-0 h-full cursor-pointer p-4 select-non text-xl"
+                data-glide-dir=">"
+            >
                 ❯
             </button>
         </div>
