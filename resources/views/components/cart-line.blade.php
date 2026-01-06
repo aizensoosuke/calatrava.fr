@@ -24,7 +24,7 @@ use App\Data\CartLineData;
         </div>
         @if($nodelete === null || $nodelete === false)
             <div
-                class="text-xs cursor-pointer hover:underline"
+                class="underline text-xs cursor-pointer hover:underline"
                 wire:click="delete({{ $line->id }})"
             >Supprimer</div>
         @endif

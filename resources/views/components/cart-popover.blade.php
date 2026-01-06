@@ -13,6 +13,7 @@
         x-show="cartOpen"
         x-cloak
         x-on:click.outside="cartOpen = false"
+        x-on:open-cart-popover.window="cartOpen = true"
     >
         <livewire:cart />
     </div>

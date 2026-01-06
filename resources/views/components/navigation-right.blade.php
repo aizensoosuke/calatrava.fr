@@ -1,4 +1,4 @@
-<div class="flex gap-4 lg:items-center text-xs font-semibold">
+<div class="flex gap-4 lg:items-center text-xs">
     <!--x-navigation-link-icon
         label="Rechercher"
         class="hidden lg:block"

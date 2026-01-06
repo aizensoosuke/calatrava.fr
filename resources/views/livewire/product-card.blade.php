@@ -72,6 +72,8 @@ $addToCart = action(function ($id) {
     if ($line !== null) {
         $line->increment('quantity');
         $this->status = 'Product added to cart.';
+        $this->dispatch('open-cart-popover');
+        $this->dispatch('cart-updated');
         return;
     }
 
@@ -84,6 +86,7 @@ $addToCart = action(function ($id) {
     $this->status = 'Product added to cart.';
 
     $this->dispatch('cart-updated');
+    $this->dispatch('open-cart-popover');
 });
 
 ?>
