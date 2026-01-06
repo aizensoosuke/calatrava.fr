@@ -48,8 +48,8 @@ class CawlPayment extends AbstractPayment
 
                     $lineDetails = new OrderLineDetails();
                     $lineDetails->setQuantity($line->quantity);
-                    $lineDetails->setProductName($line->purchasable->product->name);
-                    $lineDetails->setProductCode($line->purchasable->product->sku);
+                    $lineDetails->setProductName($line->purchasable->product->translateAttribute('name'));
+                    $lineDetails->setProductCode($line->purchasable->sku);
                     $lineDetails->setProductPrice($line->unitPrice->value);
 
                     $lineItem = new LineItem();
