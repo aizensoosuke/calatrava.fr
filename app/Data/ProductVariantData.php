@@ -2,16 +2,22 @@
 
 namespace App\Data;
 
+use Livewire\Wireable;
 use Lunar\Models\CartLine;
 use Lunar\Models\ProductOption;
 use Lunar\Models\ProductVariant;
+use Spatie\LaravelData\Concerns\WireableData;
 use Spatie\LaravelData\Data;
 
-class ProductVariantData extends Data
+class ProductVariantData extends Data implements Wireable
 {
+    use WireableData;
+
     public function __construct(
         public string $id,
+        public string $sizeId,
         public string $size,
+        public string $colorId,
         public string $color,
         public int $stock = 0,
     ) {}
@@ -23,13 +29,15 @@ class ProductVariantData extends Data
 
     public static function fromProductVariant(ProductVariant $variant): self
     {
-        $size_option_id = ProductOption::firstWhere('handle', 'size')->id;
-        $color_option_id = ProductOption::firstWhere('handle', 'color')->id;
+        $size = $variant->values->flatten()->where('option.handle', 'size')->first();
+        $color = $variant->values->flatten()->where('option.handle', 'color')->first();
 
         return new self(
             id:  $variant->id,
-            size: $variant->values->where('product_option_id', $size_option_id)->first()?->translate('name') ?? '',
-            color: $variant->values->where('product_option_id', $color_option_id)->first()?->translate('name') ?? '',
+            sizeId: $size?->id,
+            size: $size?->name->fr ?? '',
+            colorId: $color?->id,
+            color: $color?->name->fr ?? '',
             stock: $variant->stock,
         );
     }

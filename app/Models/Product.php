@@ -54,7 +54,7 @@ class Product extends \Lunar\Models\Product
 
     public function getProductOptions(): Collection
     {
-        return $this->productOptionValues->unique('id')->groupBy('product_option_id')
+        return $this->getProductOptionValues()->unique('id')->groupBy('product_option_id')
             ->map(function ($values) {
                 return [
                     'option' => $values->first()->option,

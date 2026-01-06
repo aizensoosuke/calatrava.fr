@@ -1,6 +1,6 @@
 @props([
     'product' => null,
-    'status' => ''
+    'xSelectedColorId' => 'selectedColorId'
 ])
 
 @php
@@ -9,14 +9,12 @@ use App\Data\ProductData;
 @endphp
 
 <div class="py-4 absolute bottom-0 w-full bg-white/60 flex flex-col items-center">
-    <div>Status: {{ $status }}</div>
-    <div class='text-sm mb-2'>
-        Choisissez votre taille
-    </div>
     <div class='flex justify-around gap-8'>
         @foreach($product->variants as $variant)
             <button
                 x-on:click="$wire.addToCart('{{ $variant->id }}')"
+                x-show="{{ $xSelectedColorId }} == '{{ $variant->colorId }}'"
+                x-cloak
                 class="
                     py-1 px-2 text-sm
                     @if($variant->stock > 0)
