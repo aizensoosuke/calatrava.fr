@@ -11,7 +11,7 @@ if ($cartSession) {
 <x-layouts.app>
     <div class="py-12">
         <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-            <div class="flex flex-row gap-6 items-start">
+            <div class="flex flex-col-reverse lg:flex-row gap-6 items-start">
                 @if(isset($cart))
                     <livewire:address />
                 @else
@@ -21,13 +21,13 @@ if ($cartSession) {
                     </div>
                 @endif
 
-                <div class="bg-white p-4 shadow sm:p-8 max-w-sm">
+                <div class="bg-white p-4 shadow sm:p-8 w-full lg:max-w-sm">
                     <h2 class="text-lg font-medium text-gray-900">
                         Récapitulatif de votre commande
                     </h2>
 
                     @if(!isset($cart) || $cart->lines->count() == 0)
-                        <div class="text-center mt-4">Votre panier est vide</div>
+                        <div class="mt-4">Votre panier est vide</div>
                     @else
                         <div class="flex flex-col gap-2 mt-6">
                             @foreach($cart->lines as $line)

@@ -66,7 +66,7 @@ $saveAddressAndRedirectToPayment = action(function () {
 ?>
 
 
-<div class="bg-white p-4 shadow sm:p-8 grow">
+<div class="bg-white p-4 shadow sm:p-8 grow w-full lg:w-auto">
     <h2 class="text-lg font-medium text-gray-900">
         Votre adresse de livraison
     </h2>
