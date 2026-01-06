@@ -48,6 +48,10 @@ $addToCart = action(function ($id) {
         return;
     }
 
+    if ($purchasable->product?->status != 'published') {
+        return;
+    }
+
     $purchasable->decrement('stock');
 
     $cart = CartSession::current();
