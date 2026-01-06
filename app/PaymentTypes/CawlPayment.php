@@ -43,7 +43,7 @@ class CawlPayment extends AbstractPayment
 
                 $shoppingCartItems = $cart->lines->map(function (CartLine $line) {
                     $lineAmountOfMoney = new AmountOfMoney();
-                    $lineAmountOfMoney->setAmount($line->unitPrice->value);
+                    $lineAmountOfMoney->setAmount($line->unitPrice->value * $line->quantity);
                     $lineAmountOfMoney->setCurrencyCode('EUR');
 
                     $lineDetails = new OrderLineDetails();
