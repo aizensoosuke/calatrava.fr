@@ -91,17 +91,18 @@ $addToCart = action(function ($id) {
 <div
     class="mb-6"
     x-data="{
-        'selectedColorId': $wire.product.defaultColorId
+        'selectedColorId': $wire.product.defaultColorId,
+        'open': false
     }"
 >
-    <div class="relative overflow-hidden group">
+    <div class="relative overflow-hidden group" x-on:click="open = !open">
         @if(! $product->isAvailable)
             <div class='absolute top-0 z-20 text-sm text-white bg-gray-600 text-center py-2 px-3 ml-4 mt-4'>
                 Victime de son succès
             </div>
         @endif
         <x-product-carousel :$product />
-        <div class="hidden group-hover:block">
+        <div :class="{'hidden group-hover:block': !open}" x-cloak>
             <x-size-selector :$product x-selected-color-id="selectedColorId" />
         </div>
     </div>
