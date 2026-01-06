@@ -28,6 +28,7 @@ class ProductActions
         $collection = $url->element;
 
         $productModels = $collection->products()
+            ->where('status', 'published')
             ->get();
 
         return $productModels->map(fn ($product) => ProductData::fromProductModel($product));
@@ -59,7 +60,9 @@ class ProductActions
             'prices.priceable',
             'variants.values.option',
             'media',
-        ])->get();
+        ])
+            ->where('status', 'published')
+            ->get();
 
         return $productModels->map(
             fn ($product) => ProductData::from($product)
