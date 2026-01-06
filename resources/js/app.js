@@ -1,7 +1,9 @@
 import Glide from "@glidejs/glide";
 
-new Glide('.glide', {
-    'type': 'carousel',
-    'gap': 0,
-    'swipeThreshold': 80
-}).mount()
+document.querySelectorAll('.glide').forEach(carousel =>
+    new Glide(carousel, {
+        'type': 'carousel',
+        'gap': 0,
+        'swipeThreshold': 80
+    }).mount()
+);
