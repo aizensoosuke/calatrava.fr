@@ -1,4 +1,5 @@
 @props([
+    'class' => '',
     'product' => null
 ])
 
@@ -10,6 +11,7 @@ use App\Data\ProductData;
 
 <div
     class="
+        {{ $class }}
         @if(! $product->isAvailable) opacity-60 @endif
         "
 >

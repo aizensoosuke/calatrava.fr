@@ -10,3 +10,31 @@
 }
 
 [x-cloak] { display: none !important; }
+
+.markdown p {
+    @apply mt-2
+}
+
+.markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5 {
+    @apply mt-5
+}
+
+.markdown h1 {
+    @apply text-2xl font-medium
+}
+
+.markdown h2 {
+    @apply text-xl font-medium
+}
+
+.markdown h3 {
+    @apply text-xl
+}
+
+.markdown h4 {
+    @apply text-lg font-medium
+}
+
+.markdown h5 {
+    @apply text-lg
+}
