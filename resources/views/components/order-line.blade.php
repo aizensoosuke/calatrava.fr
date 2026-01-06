@@ -25,7 +25,7 @@
                 <div>{{ $product->name }}</div>
                 <div class="text-nowrap">{{ $line->unit_price->decimal() }} €</div>
             </div>
-            <div class="text-xs">Qté: {{ $line->unit_quantity }}</div>
+            <div class="text-xs">Qté: {{ $line->quantity }}</div>
             <div class="text-xs">Variante: {{ $line->option }}</div>
         </div>
     </div>
