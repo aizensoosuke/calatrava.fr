@@ -18,10 +18,11 @@ use function \Livewire\Volt\protect;
 /** @var ProductData $product */
 state([
     'product' => null,
-    'status' => ''
 ])->locked();
 
-mount(fn($product) => $this->product = $product);
+mount(function (ProductData $product) {
+    $this->product = $product;
+});
 
 on([
     'cart-updated' => fn () => $this->refresh()
@@ -87,25 +88,42 @@ $addToCart = action(function ($id) {
 
 ?>
 
-<div class="mb-6">
+<div
+    class="mb-6"
+    x-data="{
+        'selectedColorId': $wire.product.defaultColorId
+    }"
+>
     <div class="relative overflow-hidden group">
         @if(! $product->isAvailable)
-            <div class='absolute top-0 rounded-sm z-20 text-sm text-white bg-gray-700 text-center py-2 px-3 ml-4 mt-4'>
-                Rupture
+            <div class='absolute top-0 z-20 text-sm text-white bg-gray-600 text-center py-2 px-3 ml-4 mt-4'>
+                Victime de son succès
             </div>
         @endif
         <x-product-carousel :$product />
         <div class="hidden group-hover:block">
-            <x-size-selector :$product />
+            <x-size-selector :$product x-selected-color-id="selectedColorId" />
         </div>
     </div>
-    <div class='flex flex-row px-1 py-3 justify-between'>
+    <div class='flex flex-row px-1 pt-3 justify-between'>
         <div>
             <div>{{ $product->name }}</div>
             <div>{{ $product->price }} €</div>
         </div>
-        <div class='cursor-pointer'>
-            <x-icon name="heart" />
-        </div>
+    </div>
+    <div class='flex gap-2 mx-1 mt-2'>
+        @foreach($product->colors as $color)
+            <button
+                x-on:click="selectedColorId = '{{ $color->id }}'"
+                :class="{'bg-gray-200': selectedColorId == '{{ $color->id }}'}"
+                class="
+                    py-1 px-2 text-sm
+                    opacity-100 bg-gray-100 hover:bg-gray-200 active:opacity-70
+                    focus:outline focus:outline-1 focus:outline-offset-1
+                    "
+            >
+                {{ $color->name }}
+            </button>
+        @endforeach
     </div>
 </div>

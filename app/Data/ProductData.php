@@ -19,8 +19,11 @@ class ProductData extends Data implements Wireable
         public string       $name,
         public string       $htmlDescription,
         public string       $price,
+        public int $defaultColorId,
         public bool $isAvailable,
         public ?ImageData $mainImage,
+        /** @var Collection<int, ProductOptionData> $colors */
+        public Collection $colors,
         /** @var Collection<int, ImageData> $carousel */
         public Collection $carousel,
         /** @var Collection<int, ProductVariantData> $variants */
@@ -31,13 +34,17 @@ class ProductData extends Data implements Wireable
 
     public static function fromProductModel(Product $product): self
     {
+        $colors = ProductOptionData::collectFromProduct($product, 'color');
+
         return new self(
             id: $product->id,
             name: $product->getName(),
             htmlDescription: $product->description ?? '',
             price: $product->getPrice(),
+            defaultColorId: $colors->first()->id,
             isAvailable: $product->getIsInStock(),
             mainImage: $product->getImages()->first(),
+            colors: $colors,
             carousel: $product->getImages(),
             variants: $product->variants->map(
                 fn ($variant) => ProductVariantData::fromProductVariant($variant)
