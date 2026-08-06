@@ -2,6 +2,7 @@
 
 namespace App\Modifiers;
 
+use Closure;
 use Lunar\Base\ShippingModifier;
 use Lunar\DataTypes\Price;
 use Lunar\DataTypes\ShippingOption;
@@ -12,7 +13,7 @@ use Lunar\Models\TaxClass;
 
 class CustomShippingModifier extends ShippingModifier
 {
-    public function handle(Cart $cart, \Closure $next)
+    public function handle(Cart $cart, Closure $next)
     {
         $taxClass = TaxClass::default()->first();
 

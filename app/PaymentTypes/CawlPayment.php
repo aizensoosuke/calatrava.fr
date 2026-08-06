@@ -2,6 +2,7 @@
 
 namespace App\PaymentTypes;
 
+use Exception;
 use App\Services\CawlPaymentService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -111,7 +112,7 @@ class CawlPayment extends AbstractPayment
 
         if (is_null($lunarOrder)) {
             // TODO: do something helpful
-            throw new \Exception("Could not find order.");
+            throw new Exception("Could not find order.");
         }
 
         Cache::lock('write-transactions', 10)->get(function () use ($lunarOrder, $hostedCheckout, $paymentId, $returnmac, $hostedCheckoutId) {

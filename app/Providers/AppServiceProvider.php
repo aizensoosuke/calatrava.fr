@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Lunar\Base\ShippingModifiers;
 use App\Models\Product;
 use App\Modifiers\CustomShippingModifier;
 use App\PaymentTypes\CawlPayment;
@@ -28,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    public function boot(\Lunar\Base\ShippingModifiers $shippingModifiers): void
+    public function boot(ShippingModifiers $shippingModifiers): void
     {
         URL::forceScheme('https');
 
