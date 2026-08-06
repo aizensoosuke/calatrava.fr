@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Exception;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -83,7 +84,7 @@ class CawlPaymentService
                 $message .= '(' . $error->getCode() . ')' . PHP_EOL;
             }
 
-            throw new \Exception($message);
+            throw new Exception($message);
         }
     }
 

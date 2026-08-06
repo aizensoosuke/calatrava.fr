@@ -14,7 +14,7 @@ use Lunar\Models\Url as UrlModel;
 
 class OrderActions
 {
-    public static function createOrder(Cart $cart): Order {
+    public static function createOrder(Cart $cart): LunarOrder {
         $freeShipping = $cart->total->value > config('env.shipping.free_from');
         $shippingOptionId = $freeShipping ? 'SHIPPING_FREE' : 'SHIPPING';
         $shippingOption = ShippingManifest::getOption($cart, $shippingOptionId);
@@ -45,7 +45,7 @@ class OrderActions
         return $lunarOrder;
     }
 
-    public static function createPaymentPage(Order $order): string
+    public static function createPaymentPage(LunarOrder $order): string
     {
         /** @var CawlPayment $cawl */
         $cawl = Payments::driver('cawl');
