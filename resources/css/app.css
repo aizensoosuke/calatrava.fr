@@ -12,6 +12,10 @@
 
 [x-cloak] { display: none !important; }
 
+#mentions-legales a {
+    @apply underline hover:opacity-70;
+}
+
 .markdown p {
     @apply mt-2
 }
